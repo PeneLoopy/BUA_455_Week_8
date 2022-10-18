@@ -1,0 +1,301 @@
+---
+title: "HW 5 - Part 1 - Example Netflix TV Dashboard - Completed"
+author: "Penelope Pooler"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+    
+
+
+```{r setup, include=FALSE}
+
+# this line specifies options for default options for all R Chunks
+knitr::opts_chunk$set(echo=F)
+
+# suppress scientific notation
+options(scipen=100,
+        getSymbols.warning4.0 = FALSE)
+
+# install helper package (pacman), if needed
+if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
+
+# install and load required packages
+# pacman should be first package in parentheses and then list others
+pacman::p_load(pacman, tidyverse, ggthemes, magrittr, lubridate, tidyquant, highcharter,
+               flexdashboard,knitr, RColorBrewer, dygraphs, gridExtra)
+
+# remove # in front of p_loaded if needed
+# p_loaded()
+
+```
+
+
+```{r data import, include=F, message=F, warning=F}
+
+# import data and do prelim cleaning
+nflx <- read_csv("netflix_titles.csv", show_col_types=F) |>
+  select(show_id, type, date_added, release_year, rating, listed_in) |> # useful variables (subjective)
+  separate(listed_in, sep=",", into=c("g1", "g2", "g3")) |>         # separate out genre listings 
+                                                                    # will result in lots of NAs
+  mutate(date_added = mdy(date_added),                              # convert data_added to a date var
+         year_added = year(date_added)) |>       
+  filter(!is.na(year_added)) |>
+  filter(!rating %in% c("NR", "UR"))
+
+```
+
+
+
+```{r simplify ratings and release year data, include=F, message=F, warning=F}
+
+# create min_age variable from ratings data
+nflx <- nflx |>
+  mutate(min_age = ifelse(rating %in% c("G", "TV-G", "TV-Y"), 0, NA),
+         min_age = ifelse(rating %in% c("PG", "TV-PG", "TV-Y7", "TV-Y7-FV"), 7, min_age),
+         min_age = ifelse(rating %in% c("PG-13", "TV-14"), 13, min_age),
+         min_age = ifelse(rating %in% c("NC-17", "TV-MA", "R"), 17, min_age))
+
+# create release_period variable from release year
+nflx <- nflx |>
+  mutate(release_period = ifelse(release_year <= 1980, "1925-1980", NA),
+         release_period = ifelse(release_year > 1980 & release_year <= 2000, "1981-2000", release_period),
+         release_period = ifelse(release_year > 2000 & release_year <= 2005, "2001-2005", release_period),
+         release_period = ifelse(release_year > 2005 & release_year <= 2010, "2006-2010", release_period),
+         release_period = ifelse(release_year > 2010 & release_year <= 2015, "2011-2015", release_period),
+         release_period = ifelse(release_year > 2015, "2016-2021", release_period))
+
+```
+
+
+```{r genre data cleaning, include=F, message=F, warning=F}
+
+# iterative cleaning, simplifying and filtering of genre information
+# helpful to create new dataset for this step
+nflx <- nflx |>
+  select(show_id, type, year_added, release_period, min_age, g1, g2, g3) |>
+  pivot_longer(cols=c("g1","g2","g3"), names_to="g", values_to="genre") |>
+  select(!g) |>
+  mutate(genre=tolower(genre),
+         genre = str_trim(genre),
+         genre = gsub(" movies", "", genre),
+         genre = gsub("movies", "", genre),
+         genre = gsub(" tv shows", "", genre),
+         genre = gsub("tv shows", "", genre),
+         genre = gsub("tv ", "", genre),
+         genre = gsub(" tv", "", genre),
+         
+         genre = ifelse(genre == "drama", "dramas", genre),
+         
+         genre = ifelse(genre %in% c("stand-up comedy", 
+                                     "stand-up comedy & talk shows"), 
+                        "comedies", genre),
+
+         genre = ifelse(genre %in% c("documentaries", "docuseries"), 
+                        "docs", genre),
+         
+         genre = ifelse(genre %in% c("children & family", "kids'"), 
+                        "kids", genre),
+
+         genre = gsub("action & adventure", "action_adventr", genre))|>
+
+  filter(genre %in% c("action_adventr", "comedies", "docs", 
+                      "dramas", "international", "kids"))
+
+# table(nflx$type, nflx$genre)
+
+```
+
+
+```{r summarizing dataset by relevant variables, include=F, message=F, warning=F}
+
+nflx <- nflx |>
+  group_by(type, release_period, year_added, min_age, genre) |>
+  summarize(n = n()) |>
+  pivot_wider(id_cols=c(type, release_period, year_added, min_age), 
+              names_from = genre, values_from = n)
+
+nflx[is.na(nflx)] <- 0
+
+# example dashboard will be created using cleaned and managed TV data
+nflx_tv <- nflx |>
+  filter(type == "TV Show") 
+
+# for hw 5 you will create a dataset of just movies:
+# nflx_mv <- 
+
+```
+
+### Comparison of Netflix and Amazon Stock Perfomance (Jan. 1, 2013 - Oct. 1, 2022)
+
+```{r Panel 1 - import Netflix and Amazon data, include=FALSE}
+
+# download data from netflix and amazon
+getSymbols("AMZN", from = "2013-01-01", to = "2022-10-01")
+getSymbols("NFLX", from = "2013-01-01", to = "2022-10-01")
+
+```
+
+```{r Panel 1 - plot Netflix and Amazon stock data, fig.width=12}
+
+# create nflx and amzn plots of adjusted, high and low for this time frame
+nflx_fts <- hchart(NFLX$NFLX.Adjusted, name="NFLX Adj.", color="red") |>
+  hc_add_series(NFLX$NFLX.High, name="NFLX Hi." , color="red4") |>
+  hc_add_series(NFLX$NFLX.Low, name="NFLX Lo." , color="lightcoral")
+
+amzn_fts <- hchart(AMZN$AMZN.Adjusted, name="AMZN Adj.", color="blue") |>
+  hc_add_series(AMZN$AMZN.High, name="AMZN Hi." , color="darkblue") |>
+  hc_add_series(AMZN$AMZN.Low, name="AMZN Lo." , color="lightblue")
+
+# plot these two stocks side by side
+hw_grid(nflx_fts, amzn_fts, ncol=2)
+
+```
+
+***
+
+The three data streams appear redundant in each plot, but the interactive nature of the hchart allows the viewer to examine differences between the high, low and adjusted at small intervals. 
+
+The trend in the two plots appear similar but the y-axis axis scale differs.
+
+This plot is an alternative to the [High-Low Candlestick plot](https://jkunst.com/highcharter/articles/stock.html) which can also be created as a hchart.
+
+***
+
+### Bar chart showing quantity of TV shows created and released in each time period by genre and minimum age of intended audience.
+
+```{r Panel 2 - Netflix tv release period data mgmt, include = F}
+
+nflx_tv_plot1 <- nflx_tv |>                                 # reshape data to long format for plot
+  pivot_longer(cols=c("comedies","action_adventr","docs",
+                      "dramas","international","kids"),
+               names_to="genre", values_to="n") 
+
+nflx_tv_plot1 <- nflx_tv_plot1 |>                          # simplify release period (see instructions)
+   mutate(release_period = ifelse(release_period %in% c("2001-2005", "2006-2010"), 
+                                  "2001-2010", 
+                                  release_period))
+
+nflx_tv_plot1 <- nflx_tv_plot1 |>                          # add one time period to correct filter statement
+  filter(release_period %in% c("1981-2000", "2001-2010", "2011-2015", "2016-2021"))
+
+
+nflx_tv_plot1 <- nflx_tv_plot1 |>                         # create factor variable min_ageF from min_age
+   mutate(min_ageF =  factor(min_age))
+
+
+nflx_tv_plot1 <- nflx_tv_plot1 |>                          # create genre factor variable, genreF
+  mutate(genreF = factor(genre,                            # note that order must be corrected 
+                         levels = c("international","dramas","comedies","kids","docs","action_adventr"),
+                         labels = c("Int","Dr","C","K","Do","A/A"))) 
+
+```
+
+
+```{r Panel 2 - Netflix tv release period bar chart, fig.dim = c(10, 5)}
+
+# creates a grouped stacked bar_chart to show proportion in each min_age cat in each bar
+(nflx_tv_barplot <- nflx_tv_plot1 |>
+  # creates a grouped stacked bar_chart to show proportion in each age_min cat in each bar
+  ggplot() +
+    
+  geom_bar(aes(x=genreF, y=n, fill=min_ageF),
+           stat="identity", position="stack") + 
+  
+  theme_classic() +
+
+# facet_grid creates a separate panel for each period
+  facet_grid(~release_period) + 
+  
+# adjust colors all at once by changing palette
+  scale_fill_brewer(palette = "Spectral") +
+  
+# labels axes, titles, caption, and legend
+  labs(x="Genre", y="Number of TV shows", fill="Min. Age",
+       title="Release Time Periods of Netflix TV Shows by Genre",
+       subtitle="I=International   D=Drama   A/A=Action/Adventure   C=Comedy   K=Kids   Do=Docuseries",
+       caption="Data Source: https://www.kaggle.com/shivamb/netflix-shows"))
+
+```
+
+***
+
+Number of Netflix TV shows from each Genre and Release Period (when they were created and first aired). 
+
+```{r Panel 2 - side panel - summary table}
+
+nflx_smry1 <- nflx_tv_plot1 |>
+  select(release_period, genreF, n) |>                # select variables
+  group_by(release_period, genreF) |>                 # group and summarize data
+  summarize(n = sum(n)) |>
+  pivot_wider(id_cols = release_period, names_from = genreF, values_from = n) |> # reshape data for table
+  rename("Release Time Period" = "release_period") 
+
+kable(nflx_smry1)                                     # print out presentation table
+```
+
+***
+
+Once corrected, genres should be shown in plot and table in order of prevalence.
+
+Note that the stacked barplot for these data can not be created until **`min_age`** variable is converted to a factor variable with specified categories, 0,7,13,and 17. 
+
+Link to additional information on [grouped and stacked bar charts](https://www.r-graph-gallery.com/stacked-barplot.html)
+
+Link to additional information on plots with [facets](https://ggplot2.tidyverse.org/reference/facet_grid.html) and a [bonus link](http://www.sthda.com/english/wiki/ggplot2-facet-split-a-plot-into-a-matrix-of-panels)
+  
+***
+
+### Number of Netflix TV shows added each year from 2013 to 2021 by minimum age of intended audience.
+
+```{r Panel 3 - data mgmt for Netflx tv area plot, include=F}
+
+nflx_tv_plot2 <- nflx_tv |>                           # start with nflx_tv
+  mutate(total = sum(c_across(comedies:kids))) |>     # sum all genres rowwise (columns 5 through 10)  
+
+  select(year_added, min_age, total) |>               # keep only the 3 columns needed for plot
+  filter(year_added >= 2013) |>
+
+  group_by(year_added, min_age) |>                    # summarize by year and age_min category
+  summarize(total=sum(total, na_rm=T)) |>             
+  mutate(min_ageF = factor(min_age, levels=c(0,7,13,17))) 
+
+```
+
+```{r Panel 3 - Netflix tv area plot, fig.dim = c(10, 4)}
+
+# area (proportion) plot code begins here
+# plot code is incomplete (see instructions)
+(nflx_tv_area_plot <- nflx_tv_plot2 |>
+    
+  ggplot() +                                        # shows stacked areas (proportions) by category
+  geom_area(aes(x = year_added, y = total, fill = min_ageF)) +                              
+  theme_classic() +
+  scale_x_continuous(breaks=seq(2013, 2021,1)) +   # modifies x axis so each year is shown  (See Instructions)
+  scale_fill_brewer(palette = "Spectral") +        # modifies color palette
+  labs(x="Year", y="Number of TV shows", fill="Min. Age",   # format and add plot labels
+       title="Number of Netflix TV Shows Added Each Year",
+       subtitle="2013 - 2021",
+       caption="Data Source: https://www.kaggle.com/shivamb/netflix-shows"))
+
+```
+ 
+***
+
+This plot does not include genre information (shown in Plot 2).  
+  
+Further analyses would benefit from having data that differentiates between Netflix original content and Netflix content purchased from other sources.
+
+***
+
+Link to additional information on [geom_area plots](https://www.r-graph-gallery.com/136-stacked-area-chart)
+
+Link to additional information on the [R Color Brewer options](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html)
+
+***
+
+
+
+
+
+

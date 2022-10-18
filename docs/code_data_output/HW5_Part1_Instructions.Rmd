@@ -1,0 +1,502 @@
+---
+title: "HW 5 - Part 1"
+date: "HW 5 is Due 11/2/2022"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+```{r setup, include=F}
+
+# this line specifies options for default options for all R Chunks
+knitr::opts_chunk$set(echo=T, highlight=T)
+
+# suppress scientific notation
+options(scipen=100)
+
+# install helper package (pacman) if needed
+if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
+
+# install and load required packages
+# pacman should be first package in parentheses and then list others
+pacman::p_load(pacman, tidyverse, ggthemes, magrittr, lubridate, tidyquant, highcharter,
+               flexdashboard,knitr, RColorBrewer, dygraphs, gridExtra)
+
+# remove # in front of p_loaded if needed
+p_loaded()
+
+```
+
+## Creating and Editing A Dashboard
+
+### Purpose
+
+HW Assignment 5 - Part 1 will give you experience with:
+
+- Creating/Modifying a storyboard dashboard based on a similar example
+
+- Citing source data
+
+- Executing data management tasks such as:
+
+  - Reshaping data using **`pivot_wider`** and **`pivot_longer`** (Review)
+
+  - Filtering rows and selecting variables (Review)
+
+  - Modifying variable formats using **`ifelse`** and **`factor`** (**`ifelse`** is new)
+
+  - Summarizing and presenting data in a table using **`kable`** (Review)
+
+---
+
+## Instructions
+
+### HW 5 - Part 1 - First Steps
+
+1. Create an R project named **`HW 5 <first name> <last name>`**
+
+2. Create a code_data_output folder within the project directory.
+
+3. Save the empty Dashboard-Storyboard_Template to your code_data_output folder as
+
+  - **`HW5_Part1_FirstName_last_Name.Rmd`**.
+  
+<br>
+
+4. Save the **`netflix_titles.csv`** to your code_data_output folder.
+
+5. Verify that the header of your .Rmd file is correct for a storyboard dashboard (see example below) and replace "Your Name" with your name in quotes.
+
+   -  **NOTE:** Dashboard will not work unless this header is correct.
+
+**Header Text:**
+
+```
+---
+title: "HW 5 - Part 1"
+author: "Your Name"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+    
+```
+
+<br>
+
+6. Copy Chunks 1 through 5 from the incomplete example dashboard to your dashboard. We have reviewed this code in Lecture.
+
+- This file is named **`HW5_Part1_Example_Dashboard_Incomplete.Rmd`**
+
+- Chunk 1 is the **`setup`** chunk.
+
+- Chunks 2 - 5 complete the data management tasks covered in Lectures 13 and 14.
+
+<br>
+
+7. At the end of Chunk 5:
+
+- Remove the `#` before **`nflx_mv <-`**
+
+- Use the code directly above as an example to filter the data to only movies:
+
+- filter condition: **`type == "Movie"`**
+
+<br>
+
+8.  Answer Question 1 on Blackboard (HW 5) about these data (BB Question 1).
+
+#### **BB Question 1**
+
+Fill in the blanks: The **`nflx_mv`** dataset has `____` rows and `____` columns.
+
+---
+
+Note that R chunks (R code sections) **SHOULD NOT** appear in a dashboard so the options and chunk header are different than for lecture notes:
+
+-   **`{r setup, include=FALSE}`**
+-   **`knitr::opts_chunk$set(echo=F)`**
+
+---
+
+### Panel 1 - Finance Plot
+
+**Steps to Follow:**
+
+1. In your HW 5 dashboard, in the Chunk for Panel 1 (Chunk 6), use the code in the example dashboard, but make these **THREE changes**:
+
+   i. Change **`AMZN`** to **`AMC`** everywhere it appears in the chunk.
+
+      - In these plots you will be comparing Netflix to AMC (Home movie content vs. Theaters).
+
+   ii. Change the dates of the time series to start **January 1, 2013**
+
+  iii. Change the panel heading text after `###` to match these changes.
+  
+<br>
+
+
+2. In the text area (right panel) after the plot chunk, **ADD YOUR OWN TEXT** comparing stock performance of Netflix and AMC, including linked text to where the data came from:
+
+  - [Netflix](https://finance.yahoo.com/quote/NFLX/)
+
+  - [AMC](https://finance.yahoo.com/quote/AMC/)
+  
+<br>
+
+3.  Answer Questions 2, 3, and 4 on Blackboard (HW 5) about these data and plot (BB Questions 2 - 4).
+
+#### **BB Question 2**
+
+What type of dataset are the NFLX data when they are imported into R?
+
+<br>
+
+#### **BB Question 3**
+
+Given that these data are a time series, where is the time or date information located in the dataset?
+
+<br>
+
+#### **BB Question 4**
+
+On June 2, 2021, AMC's stock was at its highest value in this timespan. On June 2, 2021, which stock, Netflix or AMC, was valued higher?
+
+---
+
+### Panel 2 - Part 1 - Bar Plot 
+
+**NOTES:**
+
+-   **After completing the Panel 2 data mgmt code chunk (Chunk), remove `eval=F` from BOTH the bar plot chunk (Chunk 9) and the summary table chunk (Chunk 10).**
+
+-   Figure dimensions, **`fig.dim = c(10, 5)`** should be left as is to utilize available space in plot panel.
+
+---
+
+**Steps:**
+
+1.  Complete **`release_period = ifelse()`** statement in the mutate command to group data from **`"2001-2005"`** and **`"2006-2010"`** into one category, **`"2001-2010"`**:
+
+```
+   mutate(release_period = ifelse(release_period %in% c("2001-2005", "2006-2010"), 
+                                  "2001-2010", 
+                                  release_period))
+```
+
+<br>
+
+2.  In the Netflix TV dashboard, data are filtered to most recent three release periods:
+
+-   **`"2001-2010", "2011-2015", "2016-2021"`**
+
+<br>
+
+- In the filter command for the barplot data mgmt chunk (Chunk 8), add one more release period:
+
+  - **`"1981-2000"`**
+    
+<br>
+
+
+3. Create a factor variable, **`min_ageF`** with these factor levels: 
+
+- **`levels = c(0, 7, 13, 17)`**
+
+<br>
+
+4. The current levels and labels for genreF are not in order of prevalence for movies. 
+
+   The correct order (based on most recent time period) for the movies data from most  prevalent to least is:
+
+   1. International
+   2. Drama
+   3. Comedies
+   4. Documentaries
+   5. Kids
+   6. Action and Adventure
+
+- **current levels: `"international","dramas","action_adventr","comedies","kids","docs"`**
+
+- **current labels: `"Int","Dr","A/A","C","K","Do"`**
+
+- Reorder the genre **`levels`** and **`labels`** in the R code so that the categories are in the order of prevalence shown above.
+
+<br>
+
+5. Make the following changes to the **`labs`** command
+
+- In the plot subtitle in the `labs` command:
+
+  - Update the order of the genres
+
+  - Change **`Docuseries`** to **`Documentaries`**
+
+  - In the plot title and x-axis label, change 'TV Shows' to 'Movies'
+
+
+6.  **Remember to remove `eval=F` from this chunk (Chunk 9)**.
+
+---
+
+### Panel 2 - Part 2 - Summary Table
+
+1. Complete the summary table code chunk so that the summary table appears in the right side panel next to the bar plot:
+
+   i.  Complete **`select`** command to select these variables: **`release_period, genreF, n`**
+
+   ii. Complete **`group_by`** command to group data by these variables: **`release_period, genreF`**
+
+   iii. Complete **`summarize`** command to sum n (number of movies): **`n=sum(n)`**
+
+   iv. Complete the **`pivot_wider`** command to:
+
+       -   Maintain release_period as is: **`id_cols = release_period`**
+
+       -   Create a column for each genre: **`names_from = genreF`**
+
+       -   Use the values from n for each genre column: **`values_from = n`**
+
+       -   Note that these options in pivot_wider are all be separated by commas.
+
+   v. Enter name of summary dataset, **`(nflx_smry1`** in **`kable()`** command to output table.
+
+-   **See completed example from class using Netflix TV Data and demo video**
+
+<br>
+
+2.  **Remember to remove `eval=F` from this chunk (Chunk 10)**.
+
+3.  In the text area (right panel) after the table, **ADD YOUR OWN TEXT** about this plot and table.
+
+    -   Data Source: [Kaggle](https://www.kaggle.com/shivamb/netflix-shows)
+    
+<br>
+
+4. Answer Questions 5 and 6 on Blackboard about Panel 2 of your dashboard (BB Questions 5 and 6).
+
+#### **BB Question 5**
+
+The final filtered dataset used to create the barplot is **`nflx_mv_plot1`**. This dataset has:
+
+-  `____` categories in the **`release_period`** variable
+
+-  `____` categories in **`min_ageF`**, the minimum age factor variable
+
+-  `____` categories in **`genreF`**, the genre factor variable
+
+<br>
+
+#### **BB Question 6:**
+
+Based on the barplot and summary table, which genre has the most movies in the three most recent release periods?
+
+---
+
+### Panel 3 - Area Plot
+
+**NOTES:**
+
+-  **After completing the Panel 3 plot code, remove `eval=F` from this chunk (Chunk 12).**
+
+-  For this plot, the data management has been completed for you. The end result is a dataset with three columns:
+
+   -  **`year_added`**
+
+   -  **`min_ageF`** (factor variable)
+
+   -  **`total`**, the number of movies added for each age group in each year
+
+-   The data were limited to 2013 and year/age combinations without data were filled in by creating a dataset of all combinations and then using a **`full_join`** command.
+
+-   This is one option to "fill_in" missing factor levels.
+
+-   Another option is provided as an optional (NOT REQUIRED) R Script (just because it's good to know)
+
+---
+
+**Steps:**
+
+1.  Answer Blackboard Question 7 (BB Question 7) based on the dataset used to create the plot in Panel 3, **`nflx_mv_plot2`**.
+
+#### **BB Question 7**
+
+After completing the data management steps, the final dataset used for the plot, **`nflx_mv_plot2`**, has
+
+- `____` rows
+
+- `____` columns
+
+- `____` different years in the year_added variable
+
+<br>
+
+2. Complete the **`geom_area()`** statement as follows:
+
+- Add the aesthetic command within the parentheses: **`aes()`**.
+
+- Within the aesthetic command, **`aes()`**, specify the following:
+
+  - x is year_added: **`x = year_added`**
+
+  - y is total: **`y = total`**
+
+  - fill is min_ageF: **`fill = min_ageF`**
+
+<br>
+
+- **NOTE: `x`, `y`**, and **`fill`** should be separated by commas.
+
+- **See completed example from class using Netflix TV Data and demo video**
+
+<br>
+
+3. Complete the **`scale_x_continuous()`** command with a **`breaks`** option:
+
+-  Within the parentheses add: **`breaks =`**
+
+   - x-axis should show every year from 2013 to 2021
+
+   - One solution: use seq() command, e.g. **`seq(2013, 2021, 1)`**
+
+   - **See completed example from class using Netflix TV Data and demo video**
+
+<br>
+
+5. In the plot title and in the y-axis label in the `labs` command change 'TV Shows' to 'Movies'
+
+6. **Remember to remove `eval=F` from this chunk (Chunk 12)**.
+
+7. **MODIFY THE TEXT** for this plot in the right side panel to be your own comments about this plot.
+
+--- 
+
+### Optional Extra Credit (2 pts.)
+
+**NOTE: There is no partial credit on this extra credit, but this is not required.**
+
+- The purpose of this Extra Credit is to experiment with themes and colors to examine choices and see what works well.
+
+- For **2 Extra Points** change these two aspects in both Panel 2 and Panel 3 plots (plots must match):
+
+  - the theme (chosen theme should NOT be theme_classic OR default)
+
+  - the `palette =` option in the scale_fill_brewer commands (should not be "Spectral" OR default palette)
+
+<br>
+
+- The theme for both plots must match and fit each plot, i.e., not obscure any plot elements in either plot.
+
+- The palette chosen must show all 4 colors clearly and can not be the R default.
+
+- There is no "right answer", but if you chose a theme that makes some of the plot elements, e.g legend, titles, not visible you will not get credit.
+
+- If you choose a palette with colors that are not clearly visible or distinguishable, you will not get credit.
+
+---
+
+Link to information on the [R Color Brewer options](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html)
+
+Link to information on [themes](https://ggplot2.tidyverse.org/reference/ggtheme.html)
+
+Link to information on [ggthemes for more options](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)
+
+------------------------------------------------------------------------
+
+### HW 5 - Part 1 - Final Steps
+
+1. Once all code is complete and runs without errors, knit Markdown file to create dashboard
+
+   - Don't forget to remove `eval = F` from chunk headers (Chunks 9, 10, and 12).
+
+2. Code_data_output folder should include:
+
+   - HW 5 - Part 1 Markdown File (.Rmd) file to create dashboard saved with your name.
+
+   - HW 5 - Part 1 Dashboard (.html) file saved with your name.
+
+   - `.csv` data file named `netflix_titles.csv`
+
+3. Create **README** file for HW 5
+
+4. Zip (Compress) project directory to submit it.
+
+5. Answer all Blackboard Questions (7 Questions)
+
+---
+
+## Grading Criteria for HW 5 - Part 1
+
+-   **(14 pts.)** Each Blackboard question for this assignment is worth 2 points.
+
+
+**Dashboard Creation Steps:**
+
+- **(3 pts.)** Completing **HW 5 - Part 1 - First Steps** as specified.
+
+
+- **(2 pts.)** Panel 1 - Finance Plot:
+
+  - Full credit for
+
+    - correctly modifying example code to create a plot
+
+    - timsespan should be 2013-01-01 to 2021-10-01
+
+    - Amazon should be replaced with AMC
+
+
+- **(4 pts.)** Panel 2 - Part 1 - Bar Plot:
+
+  - Full credit for correctly following all steps to
+
+    - Create the barplot showing each movie genre in a separate bar
+
+    - Have movie genres **ordered by prevalence** in 2016-2021 release period
+
+    - Have bars correctly labeled as specified (labels must match levels)
+
+    - Have stacked colors showing movies for each minimum age category
+
+    - Have a different panel for each release period (4 panels)
+
+    - have all plot text and accompanying text appearing correctly in dashboard
+
+<br>
+
+- **(4 pts.)** Panel 2 - Part 2 - Summary Table:
+
+  - Full credit for correctly following all steps to
+
+    - create correctly formatted and labeled table
+
+    - place table and accompanying text correctly in right panel next to plot
+
+<br>
+
+- **(4 pts.)** Panel 3 - Area Plot:
+
+  - Full credit for correctly following all steps to
+
+    - create an area plot with a correctly labeled X-axis (each year showing)
+
+    - show each minimum age category
+
+    - have all parts of the plot labeled correctly
+
+    - have accompanying text appearing correctly in dashboard
+
+<br>
+
+- **(2 pts.)** Completing **OPTIONAL** EXTRA CREDIT as specified.
+
+  - There is no partial credit for the extra credit but this is not required.
+  
+
+<br>
+
+- **(2 pts.)** Completing the **HW 5 - Part 1 - Final Steps** as specified and correctly submitting your zipped project directory.
+
+

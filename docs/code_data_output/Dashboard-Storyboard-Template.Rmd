@@ -1,0 +1,91 @@
+---
+title: "Blank Storyboard Template"
+author: "Nobody"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+
+# this line specifies options for default options for all R Chunks
+knitr::opts_chunk$set(echo=F)
+
+# suppress scientific notation
+options(scipen=100,
+        getSymbols.warning4.0 = FALSE)
+
+# install helper package (pacman), if needed
+if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
+
+# install and load required packages
+# pacman should be first package in parentheses and then list others
+pacman::p_load(pacman, tidyverse, ggthemes, magrittr, lubridate, tidyquant, highcharter,
+               flexdashboard,knitr, RColorBrewer, dygraphs, gridExtra)
+
+# remove # in front of p_loaded if needed
+# p_loaded()
+
+```
+
+### Description for Panel 1
+
+```{r data mgmt and plot code for panel 1}
+
+
+```
+
+***
+
+Text after the `***` appears in right panel, next to plot panel.
+
+Other descriptive information, insights.
+
+***
+ 
+### Description for Panel 2
+
+```{r data mgmt and plot code for panel 2}
+
+
+```
+
+***
+
+Text after the `***` appears in right panel, next to plot panel.
+
+Other descriptive information, insights.
+
+Caption for Summary Table
+
+```{r summary table for panel 2}
+
+# Adding a chunk like this with a table
+# would place a summary table in the right panel next to the plot
+
+```
+
+***
+
+Other descriptive information, insights, or a summary table can be included here.
+
+Text after the `***` appears in right panel, next to plot panel.
+
+This text would appear below summary table
+
+Other descriptive information, insights.
+
+***
+
+### Description for Panel 3
+
+```{r data mgmt and plot code for panel 3}
+
+
+```
+
+***
+
+Text after the `***` appears in right panel, next to plot panel.
+
+Other descriptive information, insights.
