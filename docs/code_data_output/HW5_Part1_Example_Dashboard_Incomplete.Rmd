@@ -129,8 +129,8 @@ nflx_tv <- nflx |>
 ```{r Panel 1 - import Netflix and Amazon data, include=FALSE}
 
 # download data from netflix and amazon
-getSymbols("AMZN", from = "2008-01-01", to = "2022-10-01")
-getSymbols("NFLX", from = "2008-01-01", to = "2022-10-01")
+getSymbols("AMZN", from = "2008-01-01", to = "2023-3-01")
+getSymbols("NFLX", from = "2008-01-01", to = "2023-3-01")
 
 ```
 
