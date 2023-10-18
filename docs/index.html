@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>BUA 455 - Week 8</title>
+    <title>BUA 455 - Week 8_9</title>
     <meta charset="utf-8" />
     <meta name="author" content="Penelope Pooler Eisenbies" />
-    <meta name="date" content="2023-03-07" />
+    <meta name="date" content="2023-10-18" />
     <script src="docs_files/header-attrs/header-attrs.js"></script>
     <link href="docs_files/panelset/panelset.css" rel="stylesheet" />
     <script src="docs_files/panelset/panelset.js"></script>
@@ -49,7 +49,7 @@ class: bottom, right
 
 #### Penelope Pooler Eisenbies
 
-#### 2023-03-07
+#### 2023-10-18
 
 [Wikipedia Sloth Page](https://en.wikipedia.org/wiki/Sloth)
 
@@ -103,7 +103,7 @@ class: bottom, right
 
 #### Groups Assigned
 
-**Proposal Rough Draft - Due Tuesday, 3/21, at 5:30 PM (No Grace Period)**
+**Proposal Rough Draft - Due Thursday, 10/26, at 5:30 PM (No Grace Period)**
    
 The rough draft does not need to be more than a couple paragraphs and should answer these questions:
 
@@ -123,40 +123,40 @@ The rough draft does not need to be more than a couple paragraphs and should ans
 
   - **Statista** is a great starting point, but your project should go beyond these small curated datasets.
 
-- **Note:** If you are interested in **sports** data or **billboard music** data and don't know how to webscrape data, I can help.
-  - Projects that require scraping data are doable, but data management will take more time and you should start now.
+- **Note:** If you are interested in **sports** data or **billboard music** data and don't know how to scrape data, I can help.
+  - Projects that require scraping data are doable, but data management will take more time and **you should start now**.
   
 ---
 
-**Proposal Final Draft - Due Monday, 3/27, at Midnight (1 Day Grace Period ONLY)**
+**Proposal Final Draft - Due Tue. 11/14, at 5:30 PM (1 Day Grace Period ONLY)**
 
-- The final proposal draft should be 1-2 pages (double spaced, 12 pt. font). 
+- The final proposal draft should be 1-3 pages (double spaced, 12 pt. font). 
 
 - In consulting, the goal of the proposal is to "sell" your skillset.
 
-- You want to convince the prospective client to trust you with their data and pay for your expertise.
-
 - The goal is to explain in non-technical language why your dashboard will be useful.
 
-  - How will you provide information that the (hypothetical) client wouldn't have otherwise?
-  
-  - List tentative goals that you hope to achieve and ideas for how to acheive them.
+- You want to convince the prospective client to trust you with their data.
 
-  - How will the client be able to use that information?
+- It also provides a roadmap for the work you plan to do so that all group members are informed
+
+  - List tentative goals that you hope to achieve and ideas for how to achieve them.
+
+  - Although your client(s) are hypothetical, it helps to envision who your target client is.
     
-- Although your client(s) are hypothetical, it helps to envision who your target client is.
-    
-  - How will they use this information to change 
-    
-    - their marketing plan?
+  - How will they use the information provided in the dashboard to 
+   
+     - improve their marketing plan or their purchasing and staffing plan?
       
-    - their purchasing and staffing plan?
+     - improve their overall investment strategy or their supply chain strategy?
       
-    - their overall investment strategy?
-      
-    - their supply chain strategy?
-      
-    - another aspect of their business?
+- **UPDATE Fall 2023:** FINAL Proposal should **ALSO** include:
+
+  - a preliminary descriptive list of your planned panels
+  
+  - what data will be presented in each panel, how will it tentatively be presented (which plots or tables)
+  
+  - Who is primarily responsible for each panel
         
 ---
 
@@ -164,7 +164,7 @@ The rough draft does not need to be more than a couple paragraphs and should ans
 
 - Understandably, the work is not yet done, so your plans may change, which is okay.
 
-- You are, most likely, not ready to make plots, but you can describe or sketch out plots that might work.
+- Your final plots and tables are not done, but it is good to have a pln for what they will be
 
   - It is actually better not to provide final proprietary work products at proposal stage.
   
@@ -179,6 +179,7 @@ The rough draft does not need to be more than a couple paragraphs and should ans
 - ***Again, it is okay if your plans change based on what you discover in the data.***
 
   - In real life, proposals and client goals are more concrete, but in this course, I encourage you to experiment.
+  
 
 ---
 
@@ -217,17 +218,17 @@ nflx &lt;- read_csv("netflix_titles.csv", show_col_types=F) |&gt; glimpse()
 
 ---
 
-### Week 8 In-class Exercises (L14 - Q1)
+### Week 9 In-class Exercises (L16 - Q1)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 How many different date formats do you see in the date_added column?
 
 &lt;br&gt;
 
-### Week 8 In-class Exercises (L14 - Q2)
+### Week 9 In-class Exercises (L16 - Q2)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 How many different commands are required to convert the date_added column to a date variable?
 
@@ -259,9 +260,9 @@ nflx &lt;- nflx |&gt;
 
 class: middle
 
-### Week 8 In-class Exercises (L14 - Q3)
+### Week 8 In-class Exercises (L16 - Q3)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 `separate` is the reverse of an R command we have already learned.  What command is that?
 
@@ -416,7 +417,7 @@ glimpse()
 
 ---
 
-### Week 8 In-class Exercise 1
+### Week 8 In-class Exercise
 
 - We will examine the Netflix ratings data again and simplify the categories to reflect minimum appropriate ages.
 
@@ -448,7 +449,7 @@ glimpse()
   
   - Copy it into empty text file provided and save it with your name
   
-  - This counts towards class participation for Tuesday, 3/7 and due by Wednesday 3/8 at midnight.
+  - This counts towards class participation for Thursday, 10/19 and due by Monday 10/23 at midnight.
   
 
 
@@ -485,11 +486,10 @@ table(nflx$rating)
 
 - This code is very similar to our simple numerical example shown previously.
 
-- In HW 5 (which will be posted on Thursday) you will:
+- In HW 5 (which will be posted **EARLY NEXT WEEK**) you will:
 
   - Filter data to remove releases from before 1981
   
-  - Group releases from 2001-2005 and 2006-2010 into one period, 2001-2010
 
 
 ```r
@@ -536,9 +536,9 @@ table(nflx$release_period)
 
 ---
 
-### Week 8 In-class Exercises (L15 - Q1)
+### Week 8 In-class Exercises (L18 - Q1)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 `str_trim` is used in an upcoming chunk to trim spaces before characters in some observations.
 
@@ -546,9 +546,9 @@ Can `gsub` also be used for this purpose?
 
 &lt;br&gt;
 
-### Week 8 In-class Exercises (L15 - Q2)
+### Week 8 In-class Exercises (L18 - Q2)
 
-***Session ID: bua455s23***
+***Session ID: bua455f23***
 
 Type `?tolower` into the console to bring up the help file for this command and `toupper`.
 
@@ -714,7 +714,7 @@ nflx_tv &lt;- nflx |&gt;                                              # example 
 
 ---
 
-### Thursday After Spring Break (3/23) Short group meetings with me
+### Tuesday (10/31) Short group meetings with me
 
 .pull-left[
 
@@ -753,8 +753,8 @@ background-size: cover
 **Group Dashboard Project**
 
 - Project Proposals: 
-  - Rough Draft due Tue. 3/21 5:30 PM
-  - Final Draft due Mon. 3/27 Midnight
+  - Rough Draft due Thu. 10/26 at 5:30 PM
+  - Final Draft due Mon. 11/14 at 5:30 PM
 
 - Data Exploration and Cleaning
 
@@ -764,9 +764,10 @@ background-size: cover
   - Carefully document choices
 
 - Introduction to HW 5 - Part 1
-  - Due Fri. 3/31 at midnight
+  - Due Fri. 11/3 at midnight
+  - Grace Period Ends Tuesday 11/7
   
-- Quiz 2 on Tue. 4/4
+- Quiz 2 on Thu. 11/9
 
 ]
 
