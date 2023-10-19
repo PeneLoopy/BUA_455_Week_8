@@ -141,7 +141,7 @@ background-size: cover
 
 class: bottom, right
 
-## BUA 455 - Week 8
+## BUA 455 - Weeks 8 and 9
 
 ### "Dashboard Project Proposal & Data Cleaning" 
 
@@ -303,7 +303,7 @@ nflx <- read_csv("netflix_titles.csv", show_col_types=F) |> glimpse()
 
 ---
 
-### Week 9 In-class Exercises (L16 - Q1)
+### Week 8 In-class Exercises (L16 - Q1)
 
 ***Session ID: bua455f23***
 
@@ -311,7 +311,7 @@ How many different date formats do you see in the date_added column?
 
 <br>
 
-### Week 9 In-class Exercises (L16 - Q2)
+### Week 8 In-class Exercises (L16 - Q2)
 
 ***Session ID: bua455f23***
 
@@ -593,7 +593,7 @@ table(nflx$release_period)
 
 ---
 
-### Week 8 In-class Exercises (L18 - Q1)
+### Week 9 In-class Exercises (L18 - Q1)
 
 ***Session ID: bua455f23***
 
@@ -603,7 +603,7 @@ Can `gsub` also be used for this purpose?
 
 <br>
 
-### Week 8 In-class Exercises (L18 - Q2)
+### Week 9 In-class Exercises (L18 - Q2)
 
 ***Session ID: bua455f23***
 
@@ -797,7 +797,7 @@ background-size: cover
 
 .pull-left[
 
-### **Key Points from Week 8**
+### **Key Points from Weeks 8 & 9**
 
 .bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph2[
 
