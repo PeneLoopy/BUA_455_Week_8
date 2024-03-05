@@ -1,5 +1,5 @@
 ---
-title: "BUA 455 - Week 8_9"
+title: "BUA 455 - Week 8"
 subtitle: "Dashboard Project Proposal & Data Cleaning"  
 author: "Penelope Pooler Eisenbies"
 date: '`r Sys.Date()`'
@@ -204,7 +204,7 @@ class: bottom, right
 
 #### Groups Assigned
 
-**Proposal Rough Draft - Due Thursday, 10/26, at 5:30 PM (No Grace Period)**
+**Proposal Rough Draft - Due Thursday, 3/21, at 5:30 PM (No Grace Period)**
    
 The rough draft does not need to be more than a couple paragraphs and should answer these questions:
 
@@ -229,7 +229,7 @@ The rough draft does not need to be more than a couple paragraphs and should ans
   
 ---
 
-**Proposal Final Draft - Due Tue. 11/14, at 5:30 PM (1 Day Grace Period ONLY)**
+**Proposal Final Draft - Due Tue. 4/9, at 5:30 PM - 48 Hour Grace Period**
 
 - The final proposal draft should be 1-3 pages (double spaced, 12 pt. font). 
 
@@ -251,7 +251,7 @@ The rough draft does not need to be more than a couple paragraphs and should ans
       
      - improve their overall investment strategy or their supply chain strategy?
       
-- **UPDATE Fall 2023:** FINAL Proposal should **ALSO** include:
+- FINAL Proposal should **ALSO** include:
 
   - a preliminary descriptive list of your planned panels
   
@@ -303,17 +303,17 @@ nflx <- read_csv("netflix_titles.csv", show_col_types=F) |> glimpse()
 
 ---
 
-### Week 8 In-class Exercises (L16 - Q1)
+### Week 8 In-class Exercises (L15 - Q1)
 
-***Session ID: bua455f23***
+***Session ID: bua455S24***
 
 How many different date formats do you see in the date_added column?
 
 <br>
 
-### Week 8 In-class Exercises (L16 - Q2)
+### Week 8 In-class Exercises (L15 - Q2)
 
-***Session ID: bua455f23***
+***Session ID: bua455S24***
 
 How many different commands are required to convert the date_added column to a date variable?
 
@@ -346,9 +346,9 @@ nflx <- nflx |>
 
 class: middle
 
-### Week 8 In-class Exercises (L16 - Q3)
+### Week 8 In-class Exercises (L15 - Q3)
 
-***Session ID: bua455f23***
+***Session ID: bua455S24***
 
 `separate` is the reverse of an R command we have already learned.  What command is that?
 
@@ -399,7 +399,8 @@ sum(is.na(nflx$year_added))
 Are there observations for which rating is `NR` (not-rated) or `UR` (un-rated)?
 
 - If so, we delete them because we are restricting our data to more common categories.
-- Remainder of the categories can be grouped logically, but these are 'oddball' categories
+- Remainder of the categories can be grouped logically, but these are 'oddball' categories.
+
 
 ```{r remove observations with nr or ur rating, results='hold'}
 
@@ -508,7 +509,7 @@ glimpse()
   
   - Copy it into empty text file provided and save it with your name
   
-  - This counts towards class participation for Thursday, 10/19 and due by Monday 10/23 at midnight.
+  - This counts towards class participation for Tuesday, 3/5 and due by Monday Wednesday 3/6 at midnight.
   
 
 ```{r using ifelse to create min_age variable for prof, echo=F, eval=T, include=F}
@@ -548,7 +549,7 @@ table(nflx$rating)
 
 - This code is very similar to our simple numerical example shown previously.
 
-- In HW 5 (which will be posted **EARLY NEXT WEEK**) you will:
+- In HW 5 - Part 1(**Now Available**) you will:
 
   - Filter data to remove releases from before 1981
   
@@ -589,13 +590,13 @@ table(nflx$release_period)
   
 <br>
   
-  - Not required but useful: use `str_trim` to see also `str_squish` and `str_pad`
-
+  - Not required but useful: use `?str_trim` to also see `str_squish` and `str_pad`
+  
 ---
 
-### Week 9 In-class Exercises (L18 - Q1)
+### Week 8 In-class Exercises (L16 - Q1)
 
-***Session ID: bua455f23***
+***Session ID: bua455S24***
 
 `str_trim` is used in an upcoming chunk to trim spaces before characters in some observations.
 
@@ -603,9 +604,9 @@ Can `gsub` also be used for this purpose?
 
 <br>
 
-### Week 9 In-class Exercises (L18 - Q2)
+### Week 8 In-class Exercises (L16 - Q2)
 
-***Session ID: bua455f23***
+***Session ID: bua455S24***
 
 Type `?tolower` into the console to bring up the help file for this command and `toupper`.
 
@@ -765,7 +766,7 @@ nflx_tv <- nflx |>                                              # example dashbo
 
 ---
 
-### Tuesday (10/31) Short group meetings with me
+### Tuesday (3/26) Short group meetings with me
 
 .pull-left[
 
@@ -797,15 +798,16 @@ background-size: cover
 
 .pull-left[
 
-### **Key Points from Weeks 8 & 9**
+### **Key Points from Week 8**
 
 .bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph2[
 
 **Group Dashboard Project**
 
 - Project Proposals: 
-  - Rough Draft due Thu. 10/26 at 5:30 PM
-  - Final Draft due Mon. 11/14 at 5:30 PM
+  - Rough Draft due Thu. 3/21 at 5:30 PM
+  - Proposal Group Meetings Tue 3/26 in class
+  - Final Draft due Tue. 4/9 at 5:30 PM
 
 - Data Exploration and Cleaning
 
@@ -815,10 +817,10 @@ background-size: cover
   - Carefully document choices
 
 - Introduction to HW 5 - Part 1
-  - Due Fri. 11/3 at midnight
-  - Grace Period Ends Tuesday 11/7
+  - Due Wed. 3/27 at midnight
+  - Grace Period Ends Fri. 3/29
   
-- Quiz 2 on Thu. 11/9
+- Quiz 2 on Thu. 4/4
 
 ]
 
